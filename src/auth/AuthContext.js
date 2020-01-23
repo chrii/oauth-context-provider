@@ -6,10 +6,9 @@ const Context = React.createContext(false);
 export class AuthStore extends React.Component {
   state = {
     isSignedIn: null,
-    userProfile: {}
+    userProfile: {},
+    loginHandler: {}
   };
-
-  profile = "";
 
   init() {
     return window.gapi.load("auth2:client", async () => {
@@ -29,6 +28,9 @@ export class AuthStore extends React.Component {
   componentDidMount() {
     this.init();
   }
+
+  componentDidUpdate() {}
+
   onAuthChange = isSignedIn => {
     if (isSignedIn) {
       const profile = this.auth.currentUser.get().getBasicProfile();
@@ -53,18 +55,7 @@ export class AuthStore extends React.Component {
     }
   };
 
-  onSignInButton() {
-    this.auth.signIn();
-  }
-
-  onSignOutButton() {
-    this.auth.signOut();
-  }
-
   render() {
-    if (this.auth2 !== undefined) {
-      console.log(this.auth2.currentUser.get().getBasicProfile());
-    }
     return (
       <Context.Provider value={{ ...this.state }}>
         {this.props.children}
