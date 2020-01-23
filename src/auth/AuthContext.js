@@ -9,39 +9,37 @@ export class AuthStore extends React.Component {
     userProfile: {}
   };
 
-  componentDidMount() {
-    window.gapi.load("client:auth2", async () => {
-      await window.gapi.client
+  profile = "";
+
+  init() {
+    return window.gapi.load("auth2:client", async () => {
+      await window.gapi.auth2
         .init({
-          clientId: GOOGLE_API_KEY,
+          client_id: GOOGLE_API_KEY,
           scope: "email"
         })
-        .then(() => {
-          this.auth = window.gapi.auth2.getAuthInstance();
+        .then(onInit => {
+          this.auth = onInit;
           this.onAuthChange(this.auth.isSignedIn.get());
           this.auth.isSignedIn.listen(this.onAuthChange);
         });
     });
   }
+
+  componentDidMount() {
+    this.init();
+  }
   onAuthChange = isSignedIn => {
     if (isSignedIn) {
-      const getProfile = this.auth.currentUser.get().getBasicProfile();
+      const profile = this.auth.currentUser.get().getBasicProfile();
       const googleProfile = {
-        userId: getProfile.dV,
-        fullName: getProfile.Ad,
-        firstName: getProfile.IW,
-        lastName: getProfile.IU,
-        email: getProfile.zu
+        userId: profile.getId(),
+        fullName: profile.getName(),
+        firstName: profile.getGivenName(),
+        lastName: profile.getFamilyName(),
+        email: profile.getEmail(),
+        profilePic: profile.getImageUrl()
       };
-      /**
-       * const googleProfile = {
-        userId: getProfile.Eea,
-        fullName: getProfile.ig,
-        firstName: getProfile.ofa,
-        lastName: getProfile.wea,
-        email: getProfile.U3
-      };
-       */
 
       const userData = this.state.userProfile
         ? googleProfile
@@ -63,27 +61,10 @@ export class AuthStore extends React.Component {
     this.auth.signOut();
   }
 
-  renderAuthButton = () => {
-    if (this.context.isSignedIn === null) {
-      return <div className="ui active centered inline loader"></div>;
-    } else if (this.props.isSignedIn) {
-      return (
-        <div className="ui google red button" onClick={this.onSignOutButton}>
-          <i className="google icon" />
-          Sign out
-        </div>
-      );
-    } else {
-      return (
-        <div className="ui google red button" onClick={this.onSignInButton}>
-          <i className="google icon" />
-          Sign in with Google
-        </div>
-      );
-    }
-  };
-
   render() {
+    if (this.auth2 !== undefined) {
+      console.log(this.auth2.currentUser.get().getBasicProfile());
+    }
     return (
       <Context.Provider value={{ ...this.state }}>
         {this.props.children}
