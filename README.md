@@ -1,14 +1,14 @@
 # OAuth context provider
 
-## This React component signs the user in with Googles OAuth 2.0 and wraps the received credentials into a context store component
+This React component signs the user in with Googles OAuth 2.0 and wraps the received credentials into a context store component
 
 **Note that this project is far from done, so i dont recommend to use it at this point**
 
-# This React App was built with create-react-app
+### This React App was built with create-react-app
 
-# If you need closer information to the run scripts, please take a look on their official page
+### If you need closer information to the run scripts, please take a look on their official page
 
-# https://github.com/facebook/create-react-app
+### https://github.com/facebook/create-react-app
 
 ## Available Scripts
 
