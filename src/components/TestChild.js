@@ -10,13 +10,7 @@ class TestChild extends React.Component {
     } else if (!this.context.isLoggedIn) {
       return <div>You have to be logged in to get here.</div>;
     } else {
-      console.log(this.context);
-      return (
-        <div>
-          Hello, {this.context.userProfile.firstName} !
-          {this.context.renderAuthButton()}
-        </div>
-      );
+      return <div>Hello, {this.context.userProfile.firstName} !</div>;
     }
   }
 }
