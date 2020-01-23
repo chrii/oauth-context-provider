@@ -5,7 +5,7 @@ const Context = React.createContext(false);
 
 export class AuthStore extends React.Component {
   state = {
-    isLoggedIn: null,
+    isSignedIn: null,
     userProfile: {}
   };
 
@@ -23,8 +23,8 @@ export class AuthStore extends React.Component {
         });
     });
   }
-  onAuthChange = isLoggedIn => {
-    if (isLoggedIn) {
+  onAuthChange = isSignedIn => {
+    if (isSignedIn) {
       const getProfile = this.auth.currentUser.get().getBasicProfile();
       const googleProfile = {
         userId: getProfile.dV,
@@ -46,10 +46,10 @@ export class AuthStore extends React.Component {
       const userData = this.state.userProfile
         ? googleProfile
         : this.state.userProfile;
-      this.setState({ isLoggedIn: true, userProfile: userData });
+      this.setState({ isSignedIn: true, userProfile: userData });
     } else {
       this.setState({
-        isLoggedIn: false,
+        isSignedIn: false,
         userProfile: {}
       });
     }
@@ -85,9 +85,7 @@ export class AuthStore extends React.Component {
 
   render() {
     return (
-      <Context.Provider
-        value={{ ...this.state, renderAuthButton: this.renderAuthButton }}
-      >
+      <Context.Provider value={{ ...this.state }}>
         {this.props.children}
       </Context.Provider>
     );
